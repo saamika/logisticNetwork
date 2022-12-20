@@ -145,12 +145,7 @@ public class SimpleLogisticDroneMovement extends MovementModel {
 
 			fd.close();
 			br.close();
-
-			//		System.out.println("Destination Read");
-
-			//		File f = new File("point_list/DestinationList.txt");
-			//		f.delete();
-
+			
 		}catch(IOException ex) {
 			ex.printStackTrace();
 			System.out.println("error");
