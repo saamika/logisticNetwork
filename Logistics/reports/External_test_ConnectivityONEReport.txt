@@ -1,0 +1,2 @@
+62.00 CONN 1 2 up
+71.40 CONN 1 2 down
