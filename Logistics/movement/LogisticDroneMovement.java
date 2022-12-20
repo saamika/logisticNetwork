@@ -18,7 +18,7 @@ import core.Settings;
 /**
  * 各基地に配置されたノードがただ最終配送目的地に行って帰ってくるだけ。
  */
-public class SimpleLogisticDroneMovement extends MovementModel {
+public class LogisticDroneMovement extends MovementModel {
 
 	/** Name space of the settings (append to group name space) */
 	public static final String DRONE_MOVEMENT_NS = "DroneMovement.";
@@ -45,7 +45,7 @@ public class SimpleLogisticDroneMovement extends MovementModel {
 	double startX;
 	double startY;
 
-	public SimpleLogisticDroneMovement(Settings settings) {
+	public LogisticDroneMovement(Settings settings) {
 		super(settings);
 
 
@@ -64,7 +64,7 @@ public class SimpleLogisticDroneMovement extends MovementModel {
 		System.out.println("initialize Base List");
 	}
 
-	protected SimpleLogisticDroneMovement(SimpleLogisticDroneMovement dm) {
+	protected LogisticDroneMovement(LogisticDroneMovement dm) {
 		super(dm);
 		this.DList = dm.DList;
 		this.PList = dm.PList;
@@ -278,8 +278,8 @@ public class SimpleLogisticDroneMovement extends MovementModel {
 	}
 
 	@Override
-	public SimpleLogisticDroneMovement replicate() {
-		return new SimpleLogisticDroneMovement(this);
+	public LogisticDroneMovement replicate() {
+		return new LogisticDroneMovement(this);
 	}
 
 	protected Coord randomCoord() {
