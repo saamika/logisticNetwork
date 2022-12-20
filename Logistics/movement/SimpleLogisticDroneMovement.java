@@ -16,8 +16,7 @@ import core.Settings;
 
 
 /**
- * Random waypoint movement model. Creates zig-zag paths within the
- * simulation area.
+ * 各基地に配置されたノードがただ最終配送目的地に行って帰ってくるだけ。
  */
 public class SimpleLogisticDroneMovement extends MovementModel {
 
