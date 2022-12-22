@@ -92,6 +92,7 @@ public class LogisticDroneMovement extends MovementModel {
 		this.PList = new DataPointList();
 		System.out.println("initialize Data Point List@Movementmodel");
 
+		
 		this.BList = new DestinationList();
 		System.out.println("initialize Base List@Movementmodel");
 	}
