@@ -17,7 +17,7 @@ import core.Settings;
 
 
 /**
- * 各基地に配置されたノードがただ最終配送目的地に行って帰ってくるだけ。
+ * 各基地に配置されたノードがアルゴリズムに従って移動。
  */
 public class LogisticDroneMovement extends MovementModel {
 
@@ -66,7 +66,8 @@ public class LogisticDroneMovement extends MovementModel {
 	double m_d_sum_ex1;
 	double m_d_sum_ex2;
 
-	//Line
+	
+	//Line：3x3のセルを想定
 	Line2D.Double gx1 = new Line2D.Double(0,3000,9000,3000);	
 	Line2D.Double gx2 = new Line2D.Double(0,6000,9000,6000);	
 	Line2D.Double gy1 = new Line2D.Double(3000,0,3000,9000);
@@ -86,13 +87,13 @@ public class LogisticDroneMovement extends MovementModel {
 		this.startLoc = new Coord(coords[0], coords[1]);
 
 		this.DList = new DestinationList();
-		System.out.println("initialize Destitnation List");
+		System.out.println("initialize Destitnation List@Movementmodel");
 
 		this.PList = new DataPointList();
-		System.out.println("initialize Data Point List");
+		System.out.println("initialize Data Point List@Movementmodel");
 
 		this.BList = new DestinationList();
-		System.out.println("initialize Base List");
+		System.out.println("initialize Base List@Movementmodel");
 	}
 
 	protected LogisticDroneMovement(LogisticDroneMovement dm) {
@@ -114,12 +115,16 @@ public class LogisticDroneMovement extends MovementModel {
 	@Override
 	public Coord getInitialLocation() {
 		assert rng != null : "MovementModel not initialized!";
+		//自身の基地を初期配置にする。
 		Coord c = getMyBase();
-
 		this.lastWaypoint = c;
+		System.out.println("test1:");
+		System.out.println("test2:");
 		
 		readListDest();
 		readListDataPoint();
+		System.out.println("test3:");
+		System.out.println("test4:");
 		return c;
 	}
 
@@ -219,8 +224,6 @@ public class LogisticDroneMovement extends MovementModel {
 			br.close();
 			//	File f = new File("point_list/DataPointList.txt");
 			//	f.delete();
-
-
 		}catch(IOException ex) {
 			ex.printStackTrace();
 			System.out.println("error");

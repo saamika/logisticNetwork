@@ -1,0 +1,130 @@
+#
+# logistics_simple:配送先まで移動し、帰ってくるだけ
+#
+
+## Scenario settings
+Scenario.name = Logistics_Simple
+Scenario.simulateConnections = true
+Scenario.updateInterval = 0.1
+# 43200s == 12h
+Scenario.endTime = 43200
+
+##インターフェース設定
+#btInterfaceはここで定義した変数→伝送速度とレンジでデータリンクを定義する
+btInterface.type = SimpleBroadcastInterface
+btInterface.transmitSpeed = 250k
+btInterface.transmitRange = 10
+
+##グループの種類数
+Scenario.nrofHostGroups = 6
+
+# Common settings for all groups
+Group.router = EpidemicRouter
+Group.bufferSize = 5M
+Group.waitTime = 0, 120
+Group.nrofInterfaces = 1
+Group.interface1 = btInterface
+Group.speed = 0.5, 1.5
+Group.msgTtl = 300
+Group.groupID = d
+
+Group1.groupID = Base
+Group1.movementModel = StationaryRandomMovementForBase
+Group1.nrofHosts = 2
+
+Group2.groupID = Dest
+Group2.movementModel = StationaryRandomMovementForDest
+Group2.nrofHosts = 3
+
+Group3.groupID = DataPoint
+Group3.movementModel = StationaryRandomMovementForDataPoint
+Group3.nrofHosts = 10
+
+
+##現時点ではドローンの初期位置はべたうちで決定。配送基地の位置からどうにか動的に設定させたい。
+Group4.groupID = Drone
+Group4.movementModel = LogisticDroneMovement
+Group4.startLocation = 2302,3032
+Group4.nrofHosts = 1
+
+Group5.groupID = Drone
+Group5.movementModel = LogisticDroneMovement
+Group5.startLocation = 3182,1320
+Group5.nrofHosts = 1
+
+Group6.groupID = Drone
+Group6.movementModel = LogisticDroneMovement
+Group6.startLocation = 3182,1320
+Group6.nrofHosts = 1
+
+
+## メッセージ生成
+# How many event generators
+Events.nrof = 1
+# Class of the first event generator
+Events1.class = MessageEventGenerator
+# (following settings are specific for the MessageEventGenerator class)
+# Creation interval in seconds (one new message every 25 to 35 seconds)
+Events1.interval = 25,35
+# Message sizes (500kB - 1MB)
+Events1.size = 500k,1M
+# range of message source/destination addresses
+Events1.hosts = 0,4
+# Message ID prefix
+Events1.prefix = M
+
+
+## Movementmodel用の設定
+# シード値
+# seed for movement models' pseudo random number generator (default = 0)
+MovementModel.rngSeed = 40
+# World's size for Movement Models without implicit size (width, height; meters)
+MovementModel.worldSize = 4200,3500 
+# How long time to move hosts in the world before real simulation
+MovementModel.warmup = 1000
+
+## Map based movement -movement model specific settings
+MapBasedMovement.nrofMapFiles = 4
+
+MapBasedMovement.mapFile1 = data/roads.wkt
+MapBasedMovement.mapFile2 = data/main_roads.wkt
+MapBasedMovement.mapFile3 = data/pedestrian_paths.wkt
+MapBasedMovement.mapFile4 = data/shops.wkt
+
+
+##　結果用
+# Reports - all report names have to be valid report classes
+# how many reports to load
+Report.nrofReports = 2
+# length of the warm up period (simulated seconds)
+Report.warmup = 0
+# default directory of reports (can be overridden per Report with output setting)
+Report.reportDir = reports/
+# Report classes to load
+Report.report1 = ContactTimesReport
+Report.report2 = ConnectivityONEReport
+
+## Default settings for some routers settings
+ProphetRouter.secondsInTimeUnit = 30
+SprayAndWaitRouter.nrofCopies = 6
+SprayAndWaitRouter.binaryMode = true
+
+## Optimization settings -- these affect the speed of the simulation
+## see World class for details.
+Optimization.cellSizeMult = 5
+Optimization.randomizeUpdateOrder = true
+
+## GUI settings
+# GUI underlay image settings
+GUI.UnderlayImage.fileName = data/helsinki_underlay.png
+# Image offset in pixels (x, y)
+GUI.UnderlayImage.offset = 64, 20
+# Scaling factor for the image
+GUI.UnderlayImage.scale = 4.75
+# Image rotation (radians)
+GUI.UnderlayImage.rotate = -0.015
+
+# how many events to show in the log panel (default = 30)
+GUI.EventLogPanel.nrofEvents = 100
+# Regular Expression log filter (see Pattern-class from the Java API for RE-matching details)
+#GUI.EventLogPanel.REfilter = .*p[1-9]<->p[1-9]$

@@ -55,13 +55,13 @@ public class SimpleLogisticDroneMovement extends MovementModel {
 		this.startLoc = new Coord(coords[0], coords[1]);
 
 		this.DList = new DestinationList();
-		System.out.println("initialize Destitnation List");
+		System.out.println("initialize Destitnation List@Simple");
 
 		this.PList = new DataPointList();
-		System.out.println("initialize Data Point List");
+		System.out.println("initialize Data Point List@Simple");
 
 		this.BList = new DestinationList();
-		System.out.println("initialize Base List");
+		System.out.println("initialize Base List@Simple");
 	}
 
 	protected SimpleLogisticDroneMovement(SimpleLogisticDroneMovement dm) {
