@@ -1,5 +1,5 @@
 #
-# logistics：アルゴリズムの動作
+# logistics:経由地周り、基地に帰る
 #
 
 ## Scenario settings
