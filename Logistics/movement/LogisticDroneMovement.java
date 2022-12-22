@@ -34,8 +34,6 @@ public class LogisticDroneMovement extends MovementModel {
 	
 	public static final String NUMBER_OF_CELLS = "nofdrones";	
 	
-	public static final String NUMBER_OF_POINTS = "nofpoints";	
-	
 	public int  flag =0;
 	/** how many waypoints should there be per path */
 	//private static final int PATH_LENGTH = 1;
@@ -48,15 +46,12 @@ public class LogisticDroneMovement extends MovementModel {
 	private  DataPointList PList; //Point:経由地のリスト
 
 	private  DestinationList BList; //Base:配送倉庫のリスト
-	
-	private DestinationList MyList;
 
 	double startX;
 	double startY;
 	
 	double nofdrones[];
 	double nofcells[];
-	double nofpoints[];
 	
 	
 	//変数宣言
@@ -87,9 +82,7 @@ public class LogisticDroneMovement extends MovementModel {
 
 		coords = settings.getCsvDoubles(START_LOCATION_S, 2);
 		nofdrones = settings.getCsvDoubles(NUMBER_OF_DRONES,1);
-		// System.out.println("nofnodes:"+nofdrones[0]); 3.0
 		nofcells = settings.getCsvDoubles(NUMBER_OF_CELLS,1);
-		nofpoints = settings.getCsvDoubles(NUMBER_OF_POINTS,1);
 		
 		this.startLoc = new Coord(coords[0], coords[1]);
 
@@ -98,12 +91,11 @@ public class LogisticDroneMovement extends MovementModel {
 
 		this.PList = new DataPointList();
 		System.out.println("initialize Data Point List@Movementmodel");
+
+		
 		
 		this.BList = new DestinationList();
 		System.out.println("initialize Base List@Movementmodel");
-		
-		this.MyList = new DestinationList();
-		System.out.println("initialize My Point List@Movementmodel");
 	}
 
 	protected LogisticDroneMovement(LogisticDroneMovement dm) {
@@ -111,11 +103,9 @@ public class LogisticDroneMovement extends MovementModel {
 		this.DList = dm.DList;
 		this.PList = dm.PList;
 		this.BList = dm.BList;
-		this.MyList = dm.MyList;
 		this.startLoc = dm.startLoc;	
 		this.nofdrones = dm.nofdrones;
 		this.nofcells = dm.nofcells;
-		this.nofpoints = dm.nofpoints;
 		
 		startX = startLoc.getX();
 		startY = startLoc.getY();
@@ -128,13 +118,15 @@ public class LogisticDroneMovement extends MovementModel {
 	public Coord getInitialLocation() {
 		assert rng != null : "MovementModel not initialized!";
 		//自身の基地を初期配置にする。
-		System.out.println("Initialize@"+super.getHost().getAddress());
 		Coord c = getMyBase();
 		this.lastWaypoint = c;
-
-		readListDataPoint();
-		readListDest();
+		System.out.println("test1:");
+		System.out.println("test2:");
 		
+		readListDest();
+		readListDataPoint();
+		System.out.println("test3:");
+		System.out.println("test4:");
 		return c;
 	}
 
@@ -189,9 +181,8 @@ public class LogisticDroneMovement extends MovementModel {
 
 			destp = new Coord(keep.getX(),keep.getY());
 			DList.addList(destp);
-			System.out.println("finally Destination: " + destp+"@"+super.getHost().getAddress());
-			MyList.addList(destp);
-			
+			System.out.println("finally Destination List : " + destp);
+
 			fd.close();
 			br.close();
 
@@ -212,7 +203,6 @@ public class LogisticDroneMovement extends MovementModel {
 	//ファイル読み込みで配送目的地、データポイントのリストを取得。
 	public void readListDataPoint() {
 		try {
-			//全ての経由地をtxtファイルから読み出し、PListに格納。
 			FileReader fd = new FileReader("point_list/DataPointList.txt");
 			BufferedReader br =  new BufferedReader(fd);
 
@@ -220,52 +210,22 @@ public class LogisticDroneMovement extends MovementModel {
 			Coord datap; //Data Point
 			double x;
 			double y;
-			
-			int j=0;
 			while ((data = br.readLine()) != null) {
 				x = Double.parseDouble(data); 
 				if((data=br.readLine())==null) {
 					System.out.println("error:DatapointListに奇数個の数字が読み込まれています");
-				}else{
+				}else {
 					y=Double.parseDouble(data);
 					datap = new Coord(x,y);
 					PList.addList(datap);
-					j++;
+					//				System.out.println("DataPoint Read");
 				}
-				System.out.println("SizeofPlist:"+j);
 			}
-				
-				int nofmypoint = (int) (nofpoints[0]/nofdrones[0])+1;
-				//System.out.println("number of my point:"+nofmypoint); 4
-				
-				for(int i=0; i< nofmypoint; i++){
-					Coord tmp = PList.popList();
-					if(tmp!=null) {	
-						MyList.addList(tmp);
-					}
-				}
-								
-				Coord tmp;
-				try {
-					FileWriter fw = new FileWriter("point_list/DataPointList.txt");
-					while((tmp = PList.popList())!=null) {
-						System.out.println(tmp);
-						fw.write(tmp.getX()+"\n"+tmp.getY()+"\n");
-					}
-
-					fw.close();
-					System.out.println("Datapoint ReWrite@"+super.getHost().getAddress());
-					
-					}catch(IOException ex) {
-					ex.printStackTrace();
-					System.out.println("error");
-				}
-				
-			
 
 			fd.close();
 			br.close();
-		
+			//	File f = new File("point_list/DataPointList.txt");
+			//	f.delete();
 		}catch(IOException ex) {
 			ex.printStackTrace();
 			System.out.println("error");
@@ -282,7 +242,7 @@ public class LogisticDroneMovement extends MovementModel {
 			BufferedReader br =  new BufferedReader(fd);
 
 			String data;
-			Coord basep; //Base Point
+			Coord destp; //Destination Point
 			double x;
 			double y;
 			int i=0;
@@ -292,17 +252,19 @@ public class LogisticDroneMovement extends MovementModel {
 					System.out.println("error:DestinationListに奇数個の数字が読み込まれています");
 				}else {
 					y=Double.parseDouble(data);
-					basep = new Coord(x,y);
-					BList.addList(basep);
+					destp = new Coord(x,y);
+					BList.addList(destp);
 					i++;
 				}
 
 			}
-			System.out.println("getMyBase@"+super.getHost().getAddress());
+ 
+			System.out.println("i:"+i);
+
 
 			Random random = new Random();
 			int r = random.nextInt(100)%i + 1;
-			System.out.println("基地決定のための乱数設定:"+r);		
+			System.out.println("rand:"+r);		
 
 			
 			for (int j=0;j<r;j++) {
@@ -342,7 +304,7 @@ public class LogisticDroneMovement extends MovementModel {
 		p.addWaypoint(lastWaypoint.clone());
 		Coord c = lastWaypoint;
 
-		c = MyList.popList();
+		c = DList.popList();
 		if(c==null) {
 			c = new Coord(startX,startY);
 		}

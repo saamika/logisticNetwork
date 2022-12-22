@@ -1,5 +1,5 @@
 #
-# logistics：アルゴリズムの動作
+# logistics_simple:配送先まで移動し、帰ってくるだけ
 #
 
 ## Scenario settings
@@ -27,9 +27,6 @@ Group.interface1 = btInterface
 Group.speed = 0.5, 1.5
 Group.msgTtl = 300
 Group.groupID = d
-Group.nofdrones = 3
-Group.nofcells = 9
-Group.nofpoints = 10
 
 Group1.groupID = Base
 Group1.movementModel = StationaryRandomMovementForBase
