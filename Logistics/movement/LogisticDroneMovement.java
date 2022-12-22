@@ -1,5 +1,6 @@
 package movement;
 
+import java.awt.geom.Line2D;
 /* 
  * Copyright 2010 Aalto University, ComNet
  * Released under GPLv3. See LICENSE.txt for details. 
@@ -29,13 +30,17 @@ public class LogisticDroneMovement extends MovementModel {
 	 * the line ({@value}) */
 	public static final String END_LOCATION_S = "endLocation";	
 
+	public static final String NUMBER_OF_DRONES = "nofdrones";	
+	
+	public static final String NUMBER_OF_CELLS = "nofdrones";	
+	
 	public int  flag =0;
 	/** how many waypoints should there be per path */
 	//private static final int PATH_LENGTH = 1;
 
 	private Coord startLoc; /** The start location of the line */
 
-	private Coord lastWaypoint;
+	private Coord lastWaypoint; //1つ前の経由地
 	private  DestinationList DList; // Destination:配送目的地のリスト
 
 	private  DataPointList PList; //Point:経由地のリスト
@@ -44,6 +49,29 @@ public class LogisticDroneMovement extends MovementModel {
 
 	double startX;
 	double startY;
+	
+	double nofdrones[];
+	double nofcells[];
+	
+	
+	//変数宣言
+	double m_d_direct;
+	double m_d_sum1;
+	double m_ratio1;
+	double m_d_direct_1;
+	double m_d_direct_2;
+	double m_d_sum_1;
+	double m_d_sum_2;
+	int m_exchange;
+	double m_d_sum_ex1;
+	double m_d_sum_ex2;
+
+	//Line
+	Line2D.Double gx1 = new Line2D.Double(0,3000,9000,3000);	
+	Line2D.Double gx2 = new Line2D.Double(0,6000,9000,6000);	
+	Line2D.Double gy1 = new Line2D.Double(3000,0,3000,9000);
+	Line2D.Double gy2 = new Line2D.Double(6000,0,6000,9000);
+
 
 	public LogisticDroneMovement(Settings settings) {
 		super(settings);
@@ -52,6 +80,9 @@ public class LogisticDroneMovement extends MovementModel {
 		double coords[];
 
 		coords = settings.getCsvDoubles(START_LOCATION_S, 2);
+		nofdrones = settings.getCsvDoubles(NUMBER_OF_DRONES,1);
+		nofcells = settings.getCsvDoubles(NUMBER_OF_CELLS,1);
+		
 		this.startLoc = new Coord(coords[0], coords[1]);
 
 		this.DList = new DestinationList();
@@ -70,7 +101,9 @@ public class LogisticDroneMovement extends MovementModel {
 		this.PList = dm.PList;
 		this.BList = dm.BList;
 		this.startLoc = dm.startLoc;	
-
+		this.nofdrones = dm.nofdrones;
+		this.nofcells = dm.nofcells;
+		
 		startX = startLoc.getX();
 		startY = startLoc.getY();
 	}
