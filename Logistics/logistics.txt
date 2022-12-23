@@ -80,7 +80,7 @@ Events1.prefix = M
 ## Movementmodel用の設定
 # シード値
 # seed for movement models' pseudo random number generator (default = 0)
-MovementModel.rngSeed = 40
+MovementModel.rngSeed = 45
 # World's size for Movement Models without implicit size (width, height; meters)
 MovementModel.worldSize = 4200,3500 
 # How long time to move hosts in the world before real simulation

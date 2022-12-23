@@ -9,6 +9,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Random;
 
 import core.Coord;
@@ -43,14 +47,16 @@ public class LogisticDroneMovement extends MovementModel {
 	private Coord startLoc; /** The start location of the line */
 
 	private Coord lastWaypoint; //1つ前の経由地
-	private  DestinationList DList; // Destination:配送目的地のリスト
+	private LinkedList<Coord> DList; // Destination:配送目的地のリスト
 
-	private  DataPointList PList; //Point:経由地のリスト
+	private LinkedList<Coord> PList; //Point:経由地のリスト
 
-	private  DestinationList BList; //Base:配送倉庫のリスト
+	private LinkedList<Coord> BList; //Base:配送倉庫のリスト
 	
-	private DestinationList MyList;
+	private LinkedList<Coord> MyList; //自身の経由するポイントのリスト
 
+	Comparator<Coord> compare;
+	
 	double startX;
 	double startY;
 	
@@ -70,6 +76,8 @@ public class LogisticDroneMovement extends MovementModel {
 	int m_exchange;
 	double m_d_sum_ex1;
 	double m_d_sum_ex2;
+	
+	Coord myBase;
 
 	
 	//Line：3x3のセルを想定
@@ -82,7 +90,6 @@ public class LogisticDroneMovement extends MovementModel {
 	public LogisticDroneMovement(Settings settings) {
 		super(settings);
 
-
 		double coords[];
 
 		coords = settings.getCsvDoubles(START_LOCATION_S, 2);
@@ -91,18 +98,20 @@ public class LogisticDroneMovement extends MovementModel {
 		nofcells = settings.getCsvDoubles(NUMBER_OF_CELLS,1);
 		nofpoints = settings.getCsvDoubles(NUMBER_OF_POINTS,1);
 		
-		this.startLoc = new Coord(coords[0], coords[1]);
+		this.startLoc = new Coord(coords[0], coords[1]);		
+		
+		this.compare = Comparator.comparing(Coord::getD);
 
-		this.DList = new DestinationList();
+		this.DList = new LinkedList<Coord>();
 		System.out.println("initialize Destitnation List@Movementmodel");
 
-		this.PList = new DataPointList();
+		this.PList = new LinkedList<Coord>();
 		System.out.println("initialize Data Point List@Movementmodel");
 		
-		this.BList = new DestinationList();
+		this.BList = new LinkedList<Coord>();
 		System.out.println("initialize Base List@Movementmodel");
 		
-		this.MyList = new DestinationList();
+		this.MyList = new LinkedList<Coord>();
 		System.out.println("initialize My Point List@Movementmodel");
 	}
 
@@ -130,6 +139,7 @@ public class LogisticDroneMovement extends MovementModel {
 		//自身の基地を初期配置にする。
 		System.out.println("Initialize@"+super.getHost().getAddress());
 		Coord c = getMyBase();
+		myBase = new Coord(c.getX(),c.getY());
 		this.lastWaypoint = c;
 
 		readListDataPoint();
@@ -158,13 +168,13 @@ public class LogisticDroneMovement extends MovementModel {
 				}else {
 					y=Double.parseDouble(data);
 					destp = new Coord(x,y);
-					DList.addList(destp);
+					DList.add(destp);
 
 				}
 			}
 
 			//DListから一つだけ取り出し、そこを現在のノードの目的地にする。
-			Coord keep = DList.popList();
+			Coord keep = DList.poll();
 
 
 			System.out.println("------------------------------------");
@@ -173,7 +183,7 @@ public class LogisticDroneMovement extends MovementModel {
 			Coord tmp;
 			try {
 				FileWriter fw = new FileWriter("point_list/DestinationList.txt");
-				while((tmp = DList.popList())!=null) {
+				while((tmp = DList.poll())!=null) {
 					System.out.println(tmp);
 					fw.write(tmp.getX()+"\n"+tmp.getY()+"\n");
 				}
@@ -188,9 +198,9 @@ public class LogisticDroneMovement extends MovementModel {
 			System.out.println("------------------------------------");
 
 			destp = new Coord(keep.getX(),keep.getY());
-			DList.addList(destp);
+			DList.add(destp);
 			System.out.println("finally Destination: " + destp+"@"+super.getHost().getAddress());
-			MyList.addList(destp);
+			MyList.add(destp);
 			
 			fd.close();
 			br.close();
@@ -229,26 +239,31 @@ public class LogisticDroneMovement extends MovementModel {
 				}else{
 					y=Double.parseDouble(data);
 					datap = new Coord(x,y);
-					PList.addList(datap);
+					PList.add(datap);
 					j++;
 				}
 				System.out.println("SizeofPlist:"+j);
 			}
 				
+				
+				//要変更：現在は単にリストの先頭から順番に取り出しているだけ。
+				//セルを考慮して選び方を決定する。
+				//ここから
 				int nofmypoint = (int) (nofpoints[0]/nofdrones[0])+1;
 				//System.out.println("number of my point:"+nofmypoint); 4
 				
 				for(int i=0; i< nofmypoint; i++){
-					Coord tmp = PList.popList();
+					Coord tmp = PList.poll();
 					if(tmp!=null) {	
-						MyList.addList(tmp);
+						MyList.add(tmp);
 					}
 				}
+				//ここまで
 								
 				Coord tmp;
 				try {
 					FileWriter fw = new FileWriter("point_list/DataPointList.txt");
-					while((tmp = PList.popList())!=null) {
+					while((tmp = PList.poll())!=null) {
 						System.out.println(tmp);
 						fw.write(tmp.getX()+"\n"+tmp.getY()+"\n");
 					}
@@ -270,9 +285,44 @@ public class LogisticDroneMovement extends MovementModel {
 			ex.printStackTrace();
 			System.out.println("error");
 		}
+		
+		
+		for(Coord x: MyList) {
+			double tmp = x.distance(myBase);
+			x.setD(tmp);
+		}
+		
+		
+		System.out.println("---未ソート---");
+		int i=0;
+		System.out.println("Size:"+MyList.size());
+		for(Coord x: MyList) {
+			System.out.println("getD@Point"+i+":"+x.getD());
+			i++;
+		}
 
+		/**数時間かけてやっとうまくいったソート。
+		 * 配送基地からの距離によって経由地をソートし、距離の小さい順に訪れる。
+		 */
+		Comparator<Coord> comparator = new Comparator<Coord>() {
+			@Override
+			public int compare(Coord c1, Coord c2) {
+				double diff = c1.getD() - c2.getD();
 
+				return (int) diff;
+			}
+
+		};
+		Collections.sort(MyList,comparator);
+
+		System.out.println("---ソート後---");
+		i=0;
+		for(Coord x: MyList) {
+			System.out.println("getD@Point"+i+":"+x.getD());
+			i++;
+		}
 	}
+
 
 
 	public Coord getMyBase() {
@@ -293,7 +343,7 @@ public class LogisticDroneMovement extends MovementModel {
 				}else {
 					y=Double.parseDouble(data);
 					basep = new Coord(x,y);
-					BList.addList(basep);
+					BList.add(basep);
 					i++;
 				}
 
@@ -306,9 +356,10 @@ public class LogisticDroneMovement extends MovementModel {
 
 			
 			for (int j=0;j<r;j++) {
-				keep = BList.popList();
+				keep = BList.poll();
 			}
 			
+		
 			if(keep == null) {
 				System.out.println("自身の基地決定でエラー");
 			}
@@ -342,9 +393,10 @@ public class LogisticDroneMovement extends MovementModel {
 		p.addWaypoint(lastWaypoint.clone());
 		Coord c = lastWaypoint;
 
-		c = MyList.popList();
+		c = MyList.poll();
 		if(c==null) {
-			c = new Coord(startX,startY);
+		//	c = new Coord(startX,startY);
+			c = new Coord(myBase.getX(),myBase.getY());
 		}
 		p.addWaypoint(c);	
 		this.lastWaypoint = c;
@@ -364,12 +416,12 @@ public class LogisticDroneMovement extends MovementModel {
 	}
 
 
-	public DestinationList getDList() {
+	public Queue<Coord> getDList() {
 		return this.DList;
 	}
 
 
-	public DataPointList getPList() {
+	public Queue<Coord> getPList() {
 		return this.PList;
 	}
 

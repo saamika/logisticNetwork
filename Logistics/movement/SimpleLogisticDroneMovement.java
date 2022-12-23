@@ -36,11 +36,11 @@ public class SimpleLogisticDroneMovement extends MovementModel {
 	private Coord startLoc; /** The start location of the line */
 
 	private Coord lastWaypoint;
-	private  DestinationList DList; // Destination:配送目的地のリスト
+	private  MyList DList; // Destination:配送目的地のリスト
 
 	private  DataPointList PList; //Point:経由地のリスト
 
-	private  DestinationList BList; //Base:配送倉庫のリスト
+	private  MyList BList; //Base:配送倉庫のリスト
 
 	double startX;
 	double startY;
@@ -54,13 +54,13 @@ public class SimpleLogisticDroneMovement extends MovementModel {
 		coords = settings.getCsvDoubles(START_LOCATION_S, 2);
 		this.startLoc = new Coord(coords[0], coords[1]);
 
-		this.DList = new DestinationList();
+		this.DList = new MyList();
 		System.out.println("initialize Destitnation List@Simple");
 
 		this.PList = new DataPointList();
 		System.out.println("initialize Data Point List@Simple");
 
-		this.BList = new DestinationList();
+		this.BList = new MyList();
 		System.out.println("initialize Base List@Simple");
 	}
 
@@ -283,7 +283,7 @@ public class SimpleLogisticDroneMovement extends MovementModel {
 	}
 
 
-	public DestinationList getDList() {
+	public MyList getDList() {
 		return this.DList;
 	}
 

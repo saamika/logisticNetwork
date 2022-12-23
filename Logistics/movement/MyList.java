@@ -5,11 +5,13 @@ import core.Coord;
 //my original
 //配送目的地の一覧を格納するリスト
 
-public class DestinationList extends PointList implements Cloneable{
+public class MyList extends PointList implements Cloneable{
 
+	double distanceFromStart;
 	//コンストラクタ
-	public DestinationList() {
+	public MyList() {
 		super();
+		
 	}
 	
 	public void addList(Coord c) {

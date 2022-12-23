@@ -11,6 +11,7 @@ package core;
 public class Coord implements Cloneable, Comparable<Coord> {
 	private double x;
 	private double y;
+	private double distanceFromStart; // added by matsutani
 	
 	/**
 	 * Constructor.
@@ -19,6 +20,7 @@ public class Coord implements Cloneable, Comparable<Coord> {
 	 */
 	public Coord(double x, double y) {
 		setLocation(x,y);
+		distanceFromStart = 0; // added by matsutani
 	}
 	
 	/**
@@ -77,6 +79,20 @@ public class Coord implements Cloneable, Comparable<Coord> {
 	 */	
 	public double getY() {
 		return this.y;
+	}
+	
+	
+	/**
+	 * added matsutani
+	 * スタート地点からの距離を返す
+	 * @return　スタート地点からの距離
+	 */
+	public double getD() {
+		return this.distanceFromStart;
+	}
+	
+	public void setD(double c) {
+		this.distanceFromStart = c;
 	}
 	
 	/**
