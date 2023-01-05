@@ -4,6 +4,8 @@
  */
 package core;
 
+import java.awt.geom.Line2D;
+
 /**
  * Class to hold 2D coordinates and perform simple arithmetics and
  * transformations
@@ -12,6 +14,7 @@ public class Coord implements Cloneable, Comparable<Coord> {
 	private double x;
 	private double y;
 	private double distanceFromStart; // added by matsutani
+	private double distanceFromLine; // added by matsutani
 	
 	/**
 	 * Constructor.
@@ -21,6 +24,7 @@ public class Coord implements Cloneable, Comparable<Coord> {
 	public Coord(double x, double y) {
 		setLocation(x,y);
 		distanceFromStart = 0; // added by matsutani
+		distanceFromLine = 0;
 	}
 	
 	/**
@@ -66,6 +70,17 @@ public class Coord implements Cloneable, Comparable<Coord> {
 	}
 	
 	/**
+	 * matustani 追加
+	 * 指定された直線からの距離を返す
+	 * @param l　直線
+	 * @return　点と直線の距離
+	 */
+	public double distanceFromLine(Line2D l) {	
+		return l.ptSegDist(this.x, this.y);
+	}
+	
+	
+	/**
 	 * Returns the x coordinate
 	 * @return x coordinate
 	 */
@@ -83,16 +98,24 @@ public class Coord implements Cloneable, Comparable<Coord> {
 	
 	
 	/**
-	 * added matsutani
+	 * matsutani 追加
 	 * スタート地点からの距離を返す
 	 * @return　スタート地点からの距離
 	 */
-	public double getD() {
+	public double getDFromStart() {
 		return this.distanceFromStart;
 	}
 	
-	public void setD(double c) {
+	public void setDFromStart(double c) {
 		this.distanceFromStart = c;
+	}
+	
+	public double getDFromLine() {
+		return this.distanceFromLine;
+	}
+	
+	public void setDFromLine(double c) {
+		this.distanceFromLine = c;
 	}
 	
 	/**

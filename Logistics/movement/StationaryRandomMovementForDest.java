@@ -73,10 +73,10 @@ public class StationaryRandomMovementForDest extends MovementModel {
 			FileWriter fw = new FileWriter("point_list/DestinationList.txt",true);
 			fw.write(c.getX()+"\n"+c.getY()+"\n");
 			fw.close();
-			System.out.println("Destination Write");
+			System.out.println("Destination Write @ Stationary For Dest");
 		}catch(IOException ex) {
 			ex.printStackTrace();
-			System.out.println("error");
+			System.out.println("error @ StationaryRandomMovementForDest");
 		}
 		return c;
 	}

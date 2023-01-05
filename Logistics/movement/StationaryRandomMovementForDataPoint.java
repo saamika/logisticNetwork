@@ -71,10 +71,10 @@ public class StationaryRandomMovementForDataPoint extends MovementModel {
 			FileWriter fw = new FileWriter("point_list/DataPointList.txt",true);
 			fw.write(c.getX()+"\n"+c.getY()+"\n");
 			fw.close();
-			System.out.println("DataPoint Write");			
+		//	System.out.println("DataPoint Write @ StationaryMovement For Data");			
 		}catch(IOException ex) {
 			ex.printStackTrace();
-			System.out.println("error");
+			System.out.println("error @ StationaryRandomMovementForDataPoint");
 		}
 
 		

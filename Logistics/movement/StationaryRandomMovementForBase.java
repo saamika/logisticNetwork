@@ -69,10 +69,10 @@ public class StationaryRandomMovementForBase extends MovementModel{
 			FileWriter fw = new FileWriter("point_list/BaseList.txt",true);
 			fw.write(c.getX()+"\n"+c.getY()+"\n");
 			fw.close();
-			System.out.println("Base Places Write");
+		//	System.out.println("Base Places Write @ StationaryMovement For Base");
 		}catch(IOException ex) {
 			ex.printStackTrace();
-			System.out.println("error");
+			System.out.println("error @ StationaryRandomMovementForBase");
 		}
 		
 		return c;
