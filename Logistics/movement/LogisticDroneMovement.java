@@ -53,15 +53,16 @@ public class LogisticDroneMovement extends MovementModel {
 
 	private LinkedList<Coord> PList; //Point:経由地のリスト
 
-<<<<<<< HEAD
+
 	private  DestinationList BList; //Base:配送倉庫のリスト
-=======
+	
 	private LinkedList<Coord> BList; //Base:配送倉庫のリスト
 	
 	private LinkedList<Coord> MyList; //自身の経由するポイントのリスト
 	
 	private LinkedList<Coord> DropList; //自身の後から経由するポイントのリスト
->>>>>>> refs/remotes/origin/master
+
+	ChristofidesThreeHalvesApproxMetricTSP<Coord,DefaultEdge> tsp; 
 
 	Comparator<Coord> compare;
 	
@@ -72,12 +73,9 @@ public class LogisticDroneMovement extends MovementModel {
 	
 	double nofdrones[];
 	double nofcells[];
-<<<<<<< HEAD
-	
-=======
+
 	double nofpoints[];
 
->>>>>>> refs/remotes/origin/master
 	
 	//変数宣言
 	double m_d_direct;
@@ -122,35 +120,27 @@ public class LogisticDroneMovement extends MovementModel {
 		super(settings);
 		
 		nofdrones = settings.getCsvDoubles(NUMBER_OF_DRONES,1);
-<<<<<<< HEAD
-=======
+
 		// System.out.println("nofnodes:"+nofdrones[0]); output : 3.0
->>>>>>> refs/remotes/origin/master
-		nofcells = settings.getCsvDoubles(NUMBER_OF_CELLS,1);
-<<<<<<< HEAD
 		
 		this.startLoc = new Coord(coords[0], coords[1]);
-=======
+
 		nofpoints = settings.getCsvDoubles(NUMBER_OF_POINTS,1);
->>>>>>> refs/remotes/origin/master
 
 		this.DList = new LinkedList<Coord>();
 		//System.out.println("initialize Destitnation List @ LogisticDroneMovement");
 
-<<<<<<< HEAD
+
 		this.PList = new DataPointList();
 		System.out.println("initialize Data Point List@Movementmodel");
 
-		
-=======
+
 		this.PList = new LinkedList<Coord>();
 		//System.out.println("initialize Data Point List @ LogisticDroneMovement");
->>>>>>> refs/remotes/origin/master
-		
-<<<<<<< HEAD
+
 		this.BList = new DestinationList();
 		System.out.println("initialize Base List@Movementmodel");
-=======
+
 		this.BList = new LinkedList<Coord>();
 		//System.out.println("initialize Base List @ LogisticDroneMovement");
 		
@@ -159,8 +149,10 @@ public class LogisticDroneMovement extends MovementModel {
 		
 		this.DropList = new LinkedList<Coord>();
 		//System.out.println("initialize Drop Point List @ LogisticDroneMovement");
+		
+		this.tsp = new ChristofidesThreeHalvesApproxMetricTSP<Cood,DefaultEdge>();
 
->>>>>>> refs/remotes/origin/master
+
 	}
 
 	protected LogisticDroneMovement(LogisticDroneMovement dm) {
@@ -169,21 +161,19 @@ public class LogisticDroneMovement extends MovementModel {
 		this.DList = dm.DList;
 		this.PList = dm.PList;
 		this.BList = dm.BList;
-<<<<<<< HEAD
-=======
+
 		this.MyList = dm.MyList;
 		this.DropList = dm.DropList;
->>>>>>> refs/remotes/origin/master
+
 		this.startLoc = dm.startLoc;	
 		this.nofdrones = dm.nofdrones;
 		this.nofcells = dm.nofcells;
-<<<<<<< HEAD
-		
+
 		startX = startLoc.getX();
 		startY = startLoc.getY();
-=======
+
 		this.nofpoints = dm.nofpoints;
->>>>>>> refs/remotes/origin/master
+
 	}
 	
 	/**
@@ -199,26 +189,21 @@ public class LogisticDroneMovement extends MovementModel {
         long startTime = System.currentTimeMillis();
 
 		//自身の基地を初期配置にする。
-<<<<<<< HEAD
-=======
+
 		System.out.println("Initialize @ Nodes"+super.getHost().getAddress());
->>>>>>> refs/remotes/origin/master
+
 		Coord c = getMyBase();
 		myBase = new Coord(c.getX(),c.getY());
 		this.lastWaypoint = c;
-<<<<<<< HEAD
+
 		System.out.println("test1:");
 		System.out.println("test2:");
-=======
 
->>>>>>> refs/remotes/origin/master
-		
-<<<<<<< HEAD
 		readListDest();
 		readListDataPoint();
 		System.out.println("test3:");
 		System.out.println("test4:");
-=======
+
 		//経由地と配送目的地を決定。
 		readListDest();	//配送目的地の決定
 		readListDataPoint();//経由地の決定とMyListへの追加
@@ -241,7 +226,7 @@ public class LogisticDroneMovement extends MovementModel {
 	     System.out.println("経路計算時間：" + (endTime - startTime) + " ms");
 	     
 		System.out.println("------------------------------------");
->>>>>>> refs/remotes/origin/master
+
 		return c;
 	}
 
@@ -290,18 +275,16 @@ public class LogisticDroneMovement extends MovementModel {
 			}
 
 			destp = new Coord(keep.getX(),keep.getY());
-<<<<<<< HEAD
+
 			DList.addList(destp);
 			System.out.println("finally Destination List : " + destp);
 
-=======
 
 			DList.add(destp);
 			System.out.println("最終目的地決定: " + destp+"@"+super.getHost().getAddress());
 			
 			dest = new Coord(destp.getX(), destp.getY());
 			
->>>>>>> refs/remotes/origin/master
 			fd.close();
 			br.close();
 
@@ -323,11 +306,9 @@ public class LogisticDroneMovement extends MovementModel {
 			Coord datap; //Data Point
 			double x;
 			double y;
-<<<<<<< HEAD
-=======
+
 			
 			//int j=0;
->>>>>>> refs/remotes/origin/master
 			while ((data = br.readLine()) != null) {
 				x = Double.parseDouble(data); 
 				if((data=br.readLine())==null) {
@@ -335,22 +316,21 @@ public class LogisticDroneMovement extends MovementModel {
 				}else {
 					y=Double.parseDouble(data);
 					datap = new Coord(x,y);
-<<<<<<< HEAD
+
 					PList.addList(datap);
 					//				System.out.println("DataPoint Read");
-=======
+
 					PList.add(datap);
 				//	j++;
->>>>>>> refs/remotes/origin/master
-				}
-<<<<<<< HEAD
-=======
-			//	System.out.println("Size of PList:"+j);
->>>>>>> refs/remotes/origin/master
-			}
-<<<<<<< HEAD
 
-=======
+				}
+
+
+			//	System.out.println("Size of PList:"+j);
+
+			}
+
+
 				
 				//要変更：ここがアルゴリズムの本質です。
 				//現在は単にリストの先頭から順番に取り出しているだけ。
@@ -433,7 +413,7 @@ public class LogisticDroneMovement extends MovementModel {
 					System.out.println("error");
 				}
 				
->>>>>>> refs/remotes/origin/master
+
 			fd.close();
 			br.close();
 			//	File f = new File("point_list/DataPointList.txt");
@@ -511,26 +491,25 @@ public class LogisticDroneMovement extends MovementModel {
 					System.out.println("error:DestinationListに奇数個の数字が読み込まれています");
 				}else {
 					y=Double.parseDouble(data);
-<<<<<<< HEAD
+
 					destp = new Coord(x,y);
 					BList.addList(destp);
-=======
+
 					basep = new Coord(x,y);
 					BList.add(basep);
->>>>>>> refs/remotes/origin/master
+
 					i++;
 				}
 
 			}
-<<<<<<< HEAD
+
  
 			System.out.println("i:"+i);
 
 
-=======
+
 			System.out.println("getMyBase@ Node"+super.getHost().getAddress());
-			
->>>>>>> refs/remotes/origin/master
+
 			Random random = new Random();
 			int r = random.nextInt(100)%i + 1;
 			System.out.println("rand:"+r);		
@@ -581,11 +560,10 @@ public class LogisticDroneMovement extends MovementModel {
 		p.addWaypoint(lastWaypoint.clone());
 		Coord c = lastWaypoint;
 
-<<<<<<< HEAD
 		c = DList.popList();
-=======
+
 		c = MyList.poll();
->>>>>>> refs/remotes/origin/master
+
 		if(c==null) {
 		//	c = new Coord(startX,startY);
 			c = new Coord(myBase.getX(),myBase.getY());
