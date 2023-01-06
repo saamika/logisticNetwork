@@ -21,14 +21,16 @@ import java.util.Random;
 
 import core.Coord;
 import core.Settings;
-
+import org.jgrapht.alg.tour.*;
 
 
 /**
  * 各基地に配置されたノードがアルゴリズムに従って移動。
  */
+
 public class LogisticDroneMovement extends MovementModel {
 // MovementModel を継承。
+	
 	
 	/** Name space of the settings (append to group name space) */
 	public static final String DRONE_MOVEMENT_NS = "DroneMovement.";
