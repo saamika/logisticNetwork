@@ -36,6 +36,7 @@ import util.Range;
  * should always be forward slash ("/").
  * </P> 
  */
+
 public class Settings {
 	/** properties object where the setting files are read into */
 	protected static Properties props;
