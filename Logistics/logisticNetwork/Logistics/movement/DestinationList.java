@@ -1,8 +1,6 @@
 package movement;
 
-import core.Coord;
-
-//my original
+//matsutni original PointListを継承
 //配送目的地の一覧を格納するリスト
 
 public class DestinationList extends PointList implements Cloneable{
@@ -12,12 +10,12 @@ public class DestinationList extends PointList implements Cloneable{
 		super();
 	}
 	
-	public void addList(Coord c) {
-		list.add(c);
+	public void addList(Point c) {
+		pointsList.add(c);
 	}
 	
-	public Coord popList() {
-		return list.poll();
+	public Point popList() {
+		return pointsList.poll();
 	}
 	
 }

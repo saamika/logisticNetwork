@@ -226,5 +226,22 @@ public abstract class Connection {
 				" from " + this.msgFromNode : "");
 	}
 
+	/**
+	 * コネクションの宛先ノードを返す
+	 * @return　宛先ノード
+	 */
+	public DTNHost getToNode() {
+		return toNode;
+	}
+
+	/**
+	 * コネクションの送信元ノードを返す
+	 * @return　送信元ノード
+	 */
+	public DTNHost getFromNode() {
+		return fromNode;
+	}
+	
+	
 }
 
