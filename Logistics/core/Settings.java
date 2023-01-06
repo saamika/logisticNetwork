@@ -44,6 +44,7 @@ public class Settings {
 	public static final String DEF_SETTINGS_FILE ="logistics80.txt";
 	
 	/** 
+	 * 
 	 * Setting to define the file name where all read settings are written
 	 * ({@value}. If set to an empty string, standard output is used. 
 	 * By default setting are not written anywhere. 
