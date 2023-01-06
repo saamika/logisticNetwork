@@ -3,11 +3,11 @@
 #
 
 ## Scenario settings
-Scenario.name = Logistics_20
+Scenario.name = Logistics_100
 Scenario.simulateConnections = true
 Scenario.updateInterval = 0.1
 # 43200s == 12h
-Scenario.endTime = 1800
+Scenario.endTime = 1000
 
 ##インターフェース設定
 #btInterfaceはここで定義した変数→伝送速度とレンジでデータリンクを定義する
@@ -29,7 +29,7 @@ Group.msgTtl = 300
 Group.groupID = d
 Group.nofdrones = 100
 Group.nofcells = 9
-Group.nofpoints = 20
+Group.nofpoints = 100
 
 Group1.groupID = Base
 Group1.movementModel = StationaryRandomMovementForBase
@@ -39,7 +39,7 @@ Group1.router = EpidemicRouter
 
 Group2.groupID = DataPoint
 Group2.movementModel = StationaryRandomMovementForDataPoint
-Group2.nrofHosts = 20  
+Group2.nrofHosts = 100  
 
 Group3.groupID = Dest
 Group3.movementModel = StationaryRandomMovementForDest
@@ -48,7 +48,6 @@ Group3.nrofHosts = 100
 Group4.groupID = Drone
 Group4.movementModel = LogisticDroneMovement
 Group4.nrofHosts = 100
-#Group4.router = LogisticRouter
 
 
 ## メッセージ生成
@@ -67,7 +66,7 @@ Events1.size = 500k,1M
 # range of message source/destination addresses
 # "x, y" : "x以上y未満" →"0, 1" なら "0以上1未満"
 Events1.hosts = 0, 1
-Events1.tohosts 1, 21
+Events1.tohosts 1, 101
 
 # Message ID prefix
 Events1.prefix = Ma

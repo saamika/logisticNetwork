@@ -7,7 +7,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/5"/>
-	<classpathentry kind="lib" path="C:/Users/user/git/logisticNetwork/Logistics/lib/DTNConsoleConnection.jar"/>
-	<classpathentry kind="lib" path="C:/Users/user/git/logisticNetwork/Logistics/lib/ECLA.jar"/>
+	<classpathentry kind="lib" path="C:/Users/SAAMIKA.DESKTOP-51NJD2Q/git/logisticNetwork/Logistics/lib/DTNConsoleConnection.jar"/>
+	<classpathentry kind="lib" path="C:/Users/SAAMIKA.DESKTOP-51NJD2Q/git/logisticNetwork/Logistics/lib/ECLA.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

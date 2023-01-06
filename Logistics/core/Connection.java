@@ -227,16 +227,16 @@ public abstract class Connection {
 	}
 
 	/**
-	 * コネクションの送信元ノードを返す
-	 * @return　送信元ノード
+	 * コネクションの宛先ノードを返す
+	 * @return　宛先ノード
 	 */
 	public DTNHost getToNode() {
 		return toNode;
 	}
 
 	/**
-	 * コネクションの宛先ノードを返す
-	 * @return　宛先ノード
+	 * コネクションの送信元ノードを返す
+	 * @return　送信元ノード
 	 */
 	public DTNHost getFromNode() {
 		return fromNode;

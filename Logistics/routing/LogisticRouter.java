@@ -53,7 +53,9 @@ public class LogisticRouter extends ActiveRouter {
 		for(Connection c : myConnection) {
 
 			//ここアドレスの範囲をハードコーディング。辞めたい。
-			//if(c.getToNode().getAddress()>=0 && c.getToNode().getAddress()<=10) {
+			if(c.getToNode().getAddress()>=121) {
+				
+			}else{
 				
 				if (isTransferring() || !canStartTransfer()) {
 					return; // transferring, don't try other connections yet：転送中ならまだコネクションを試さない
@@ -66,7 +68,7 @@ public class LogisticRouter extends ActiveRouter {
 
 				// then try any/all message to any/all connection
 				this.tryAllMessagesToAllConnections();
-			//}
+			}
 		}
 	}
 

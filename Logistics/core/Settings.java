@@ -41,7 +41,7 @@ public class Settings {
 	protected static Properties props;
 	/** file name of the default settings file ({@value}) */
 	//public static final String DEF_SETTINGS_FILE ="logistics_simple_test.txt";
-	public static final String DEF_SETTINGS_FILE ="logistics.txt";
+	public static final String DEF_SETTINGS_FILE ="logistics80.txt";
 	
 	/** 
 	 * Setting to define the file name where all read settings are written
