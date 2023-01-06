@@ -19,9 +19,11 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
+import org.jgrapht.Graph;
+import org.jgrapht.alg.tour.ChristofidesThreeHalvesApproxMetricTSP;
+
 import core.Coord;
 import core.Settings;
-
 
 
 /**
@@ -48,6 +50,7 @@ public class LogisticDroneMovement extends MovementModel {
 
 	private Coord startLoc; /** The start location of the line */
 
+	
 	private Coord lastWaypoint; //1つ前の経由地
 	private LinkedList<Coord> DList; // Destination:配送目的地のリスト
 
@@ -84,12 +87,14 @@ public class LogisticDroneMovement extends MovementModel {
 	double m_d_sum_ex2;
 	
 
-	//Graph<Coord,E> graph;
-	//ChristofidesThreeHalvesApproxMetricTSP<V, E> tsp;
+	Graph<Coord,E> graph;
+	ChristofidesThreeHalvesApproxMetricTSP<V, E> tsp;
 	
 	//直線で移動したときの直線
 	Line2D.Double directLine;
 
+	
+	
 	//Line：3x3のセルを想定
 	//cellのグリッドを表すライン4本
 	Line2D.Double gx1 = new Line2D.Double(0,3000,9000,3000);	

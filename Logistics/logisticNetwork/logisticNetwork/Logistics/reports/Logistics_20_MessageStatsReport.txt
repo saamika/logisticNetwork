@@ -1,5 +1,5 @@
 Message stats for scenario Logistics_20
-sim_time: 29.9000
+sim_time: 31.2000
 created: 20
 started: 400
 relayed: 400
